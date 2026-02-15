@@ -1,149 +1,1554 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhadeiAwn Bible</title>
+  <style>
+   :root {
+   --bg-color: #f9f9f9;
+   --text-color: #111;
+   --verse-number-color: #0d47a1;
+   --header-bg: #0d47a1;
+   --popup-bg: #fff;
+   --popup-text: #111;
+   --popup-border: #ccc;
+   }
+   body.dark {
+   --bg-color: #121212;
+   --text-color: #e0e0e0;
+   --header-bg: #212121;
+   --popup-bg: #333;
+   --popup-text: #e0e0e0;
+   --popup-border: #555;
+   }
+   body {
+   background-color: var(--bg-color);
+   color: var(--text-color);
+   font-family: "Georgia", serif;
+   margin: 0 auto;
+   line-height: 1.8;
+   transition: background-color 0.3s, color 0.3s;
+   font-size: 16px;
+   max-width: 900px;
+   padding: 0 15px;
+   }
+   .menu-header {
+    text-align: center;
+    padding: 30px 0;
+}
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+.menu-logo {
+    width: 200px;
+    height: 160px;
+    opacity: 0.9;
+}
+   header {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   z-index: 1000;
+   background-color: var(--header-bg);
+   color: white;
+   padding: 10px 20px;
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+   }
+   #searchHeader, #historyHeader, #bookmarkHeader {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   z-index: 1001;
+   background-color: var(--header-bg);
+   color: white;
+   padding: 10px 20px;
+   display: none;
+   align-items: center;
+   gap: 12px;
+   font-size: 18px;
+   font-weight: 600;
+   }
+   #backToMain, #backToMainHistory, #backToMainBookmarks {
+   background: none;
+   border: none;
+   color: white;
+   font-size: 22px;
+   cursor: pointer;
+   line-height: 1;
+   }
+   .history-header-left, .bookmark-header-left {
+   display: flex;
+   align-items: center;
+   gap: 12px;
+   }
+   .left-section, .right-section {
+   display: flex;
+   align-items: center;
+   position: relative;
+   }
+   .right-section {
+   gap: 8px; /* spacing instead of big margins */
+   }
+   .toggle-btn {
+   width: 35px;
+   height: 36px;
+   border-radius: 50%;
+   background-color: var(--popup-bg);
+   border: none;
+   cursor: pointer;
+   transition: background-color 0.3s;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 18px;
+   margin-right:50px;
+   }
+   .toggle-btn:hover {
+   background-color: var(--popup-border);
+   }
+   .chapter-dropdown-btn, .book-dropdown-btn {
+   margin-left: 10px;
+   padding: 5px 11px;
+   font-size: 16px;
+   background-color: transparent;
+   color: white;
+   border: 1px solid white;
+   cursor: pointer;
+   border-radius: 4px;
+   }
+   .chapter-grid-popup, .book-grid-popup {
+   position: absolute;
+   top: 45px;
+   background-color: var(--popup-bg);
+   color: var(--popup-text);
+   border: 1px solid var(--popup-border);
+   display: none;
+   gap: 5px;
+   padding: 10px;
+   z-index: 999;
+   max-height: 500px;
+   overflow-y: auto;
+   border-radius: 6px;
+   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+   }
+   .book-grid-popup {
+   grid-template-columns: 1fr;
+   width: 200px;
+   }
+   .chapter-grid-popup {
+   grid-template-columns: repeat(5, 1fr);
+   }
+   .book-grid-popup button, .chapter-grid-popup button {
+   padding: 10px;
+   font-size: 20px;
+   border: none;
+   background: none;
+   text-align: justify;
+   width: 100%;
+   cursor: pointer;
+   font-weight: bold;
+   color: var(--popup-text);
+   border-radius: 4px;
+   }
+   .chapter-grid-popup button {
+   text-align: center;
+   min-width: 50px;
+   background-color: #f1f1f1;
+   border: 1px solid var(--popup-border);
+   }
+   body.dark .chapter-grid-popup button {
+   background-color: #444;
+   }
+   .book-grid-popup button:hover, .chapter-grid-popup button:hover {
+   background-color: #f0f0f0;
+   color: black;
+   }
+   body.dark .book-grid-popup button:hover,
+   body.dark .chapter-grid-popup button:hover {
+   background-color: #555;
+   color: white;
+   }
+   .chapter-grid-popup::-webkit-scrollbar,
+   .book-grid-popup::-webkit-scrollbar {
+   width: 8px;
+   }
+   .chapter-grid-popup::-webkit-scrollbar-thumb,
+   .book-grid-popup::-webkit-scrollbar-thumb {
+   background: #999;
+   border-radius: 4px;
+   }
+   .chapter-title {
+   text-align: center;
+   font-size: 20px;
+   font-weight: bold;
+   margin-top: 30px;
+   margin-bottom: 20px;
+   color: var(--verse-number-color);
+   }
+   .verse {
+   margin-bottom: 15px;
+   display:inline;
+   text-align: justify;
+   text-indent: 2em;
+   }
+   .verse::first-letter {
+   font-weight: bold;
+   color: var(--verse-number-color);
+   margin-right: 0.4em;
+   }
+   .poetic {
+   margin-bottom: 15px;
+   padding-left: 0.5em;
+   white-space: pre-line;
+   font-style: italic;
+   text-align: justify;
+   text-indent: 1.5em;
+   }
+   .chapter-text {
+   text-align: justify;
+   }
+   main {
+   padding-top: 70px;
+   padding-bottom: 20px;
+   }
+   .nav-btn {
+   margin-left: 5px;
+   padding: 5px 10px;
+   font-size: 18px;
+   background-color: var(--header-bg);
+   color: white;
+   border: none;
+   cursor: pointer;
+   border-radius: 4px;
+   }
+   .nav-btn:hover {
+   background-color: #0b3a85;
+   }
+   .side-menu {
+   position: fixed;
+   top: 0;
+   left: -260px;
+   width: 250px;
+   height: 100%;
+   background-color: grey;
+   color: white;
+   overflow-y: auto;
+   transition: left 0.3s ease;
+   z-index: 2000;
+   }
+   .side-menu.open {
+   left: 0;
+   }
+   .side-menu button {
+   display: block;
+   width: 100%;
+   padding: 15px 20px;
+   background: none;
+   border: none;
+   color: white;
+   text-align: left;
+   font-size: 16px;
+   cursor: pointer;
+   }
+   .side-menu button:hover {
+   background-color: #444;
+   }
+   .menu-btn {
+   font-size: 22px;
+   background: none;
+   border: none;
+   color: white;
+   cursor: pointer;
+   margin-right: 10px;
+   }
+   #searchPage mark {
+   background: yellow;
+   color: black;
+   }
+   #searchPage, #historyPage, #bookmarkPage {
+   padding: 20px;
+   padding-top: 70px; /* Added padding to fix the issue */
+   display: none;
+   }
+   .verse.temp-highlight,
+   .poetic.temp-highlight {
+   background-color: grey;
+   display: inline-block;
+   width: 100%;
+   border-radius: 4px;
+   transition: background-color 0.5s ease;
+   }
+   .icon-btn {
+   background: none;
+   border: none;
+   color: white;
+   font-size: 24px;
+   cursor: pointer;
+   margin-left: 0; /* moved left */
+   }
+   #settings-popup {
+   position: fixed;
+   top: 55px;
+   right: 0;
+   width: 250px;
+   background-color: var(--popup-bg);
+   border: 1px solid var(--popup-border);
+   border-radius: 8px;
+   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+   padding: 15px;
+   display: none;
+   flex-direction: column;
+   gap: 15px;
+   z-index: 1000;
+   }
+   .setting-group {
+   display: flex;
+   flex-direction: column;
+   gap: 5px;
+   }
+   .setting-group label {
+   font-size: 14px;
+   color: var(--popup-text);
+   font-weight: bold;
+   }
+   .setting-group input[type="range"] {
+   width: 100%;
+   }
+   .defined-word {
+   cursor: pointer;
+   }
+   .defined-word sup {
+   color: blue;
+   }
+   .definition-overlay {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background: rgba(0, 0, 0, 0.5);
+   z-index: 1999;
+   display: none;
+   justify-content: center;
+   align-items: center;
+   }
+   .definition-popup {
+   background-color: var(--popup-bg);
+   color: var(--popup-text);
+   border: 1px solid var(--popup-border);
+   padding: 20px;
+   border-radius: 10px;
+   box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+   width: 90%;
+   max-width: 600px;
+   max-height: 50vh;
+   overflow-y: auto;
+   text-align: left;
+   }
+   .definition-popup-content {
+   margin-bottom: 10px;
+   line-height: 1.5;
+   }
+   .close-btn {
+   float: right;
+   font-size: 20px;
+   font-weight: bold;
+   cursor: pointer;
+   background: none;
+   border: none;
+   color: var(--popup-text);
+   }
+   .history-item, .bookmark-item {
+   margin-bottom: 8px;
+   cursor: pointer;
+   padding: 10px;
+   border: 1px solid var(--popup-border);
+   border-radius: 8px;
+   background-color: var(--popup-bg);
+   display: flex;
+   align-items: center;
+   transition: background-color 0.2s;
+   }
+   .history-item:hover, .bookmark-item:hover {
+   background-color: #f0f0f0;
+   }
+   body.dark .history-item:hover, body.dark .bookmark-item:hover {
+   background-color: #444;
+   }
+   .history-item-header, .bookmark-item-header {
+   font-weight: bold;
+   margin-bottom: 40px;
+   }
+   .history-item-timestamp {
+   font-size: 0.8em;
+   color: #777;
+   }
+   body.dark .history-item-timestamp {
+   color: #aaa;
+   }
+   .history-item input[type="checkbox"] {
+   margin-right: 15px;
+   width: 20px;
+   height: 20px;
+   cursor: pointer;
+   }
+   .history-item-content, .bookmark-item-content {
+   flex-grow: 1;
+   }
+   #deleteHistoryBtn, #deleteBookmarksBtn {
+   background-color: #dc3545;
+   color: white;
+   border: none;
+   padding: 8px 15px;
+   border-radius: 5px;
+   cursor: pointer;
+   display: none;
+   margin-top: 20px;
+   width: 100%;
+   }
+   #deleteHistoryBtn:hover, #deleteBookmarksBtn:hover {
+   background-color: #c82333;
+   }
+   #selectDeleteHeader {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   width: 100%;
+   }
+   #searchPage-container {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   }
+   #search-input-group {
+   display: flex;
+   width: 100%;
+   gap: 10px;
+   }
+   #searchInput {
+   flex-grow: 1;
+   padding: 8px 12px;
+   border-radius: 5px;
+   border: 1px solid var(--popup-border);
+   }
+   #doSearch {
+   padding: 8px 12px;
+   border-radius: 5px;
+   border: 1px solid var(--header-bg);
+   background-color: var(--header-bg);
+   color: white;
+   cursor: pointer;
+   }
+   #doSearch:hover {
+   background-color: #0b3a85;
+   }
+   #searchResults, #historyList, #bookmarkEntries {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   }
+   .search-result-item, .bookmark-item {
+   margin-bottom: 8px;
+   cursor: pointer;
+   padding: 10px;
+   border: 1px solid var(--popup-border);
+   border-radius: 8px;
+   background-color: var(--popup-bg);
+   transition: background-color 0.2s;
+   }
+   .search-result-item:hover, .bookmark-item:hover {
+   background-color: #f0f0f0;
+   }
+   body.dark .search-result-item:hover, body.dark .bookmark-item:hover {
+   background-color: #444;
+   }
+   /* New styles for the floating toolbar */
+   .verse.selected {
+      text-decoration: underline;
+   }
+   #floating-toolbar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--popup-bg);
+      border: 1px solid var(--popup-border);
+      border-radius: 25px;
+      padding: 10px 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+      align-items: center;
+      gap: 15px;
+      z-index: 2000;
+   }
+   #floating-toolbar button {
+      background: none;
+      border: none;
+      color: var(--popup-text);
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      transition: color 0.2s;
+   }
+   #floating-toolbar button:hover {
+      color: var(--header-bg);
+   }
+   
+   .bookmark-icon {
+   display: inline;
+   margin-left: 6px;
+   vertical-align: baseline; 
+   width: 18px;
+   height: 18px;
+   fill: #ffc107;
+   }
+   .bookmark-item input[type="checkbox"] {
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+   }
+   
+   /* New highlight toolbar styles */
+   #highlight-toolbar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--popup-bg);
+      border: 1px solid var(--popup-border);
+      border-radius: 25px;
+      padding: 10px 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      display: none;
+      align-items: center;
+      gap: 15px;
+      z-index: 2001; /* Higher z-index to be on top of the main toolbar */
+   }
+   .highlight-color-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: border-color 0.2s;
+   }
+   .highlight-color-btn:hover {
+      border-color: #ccc;
+   }
+   .highlight-color-btn.selected-color {
+      border-color: var(--header-bg);
+   }
 
-        .gradient-bg {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-        }
-    </style>
+   /* Highlighted verses with specific colors */
+   .verse.highlighted-yellow,
+   body.dark .verse.highlighted-yellow { background-color: rgba(255, 255, 102, 0.5); }
+   .verse.highlighted-green,
+   body.dark .verse.highlighted-green { background-color: rgba(170, 255, 170, 0.5); }
+   .verse.highlighted-blue,
+   body.dark .verse.highlighted-blue { background-color: rgba(179, 229, 252, 0.5); }
+   .verse.highlighted-pink,
+   body.dark .verse.highlighted-pink { background-color: rgba(255, 192, 203, 0.5); }
+   .verse.highlighted-none { background-color: transparent; }
+   
+   .poetic.highlighted-yellow,
+   body.dark .poetic.highlighted-yellow { background-color: rgba(255, 255, 102, 0.5); }
+   .poetic.highlighted-green,
+   body.dark .poetic.highlighted-green { background-color: rgba(170, 255, 170, 0.5); }
+   .poetic.highlighted-blue,
+   body.dark .poetic.highlighted-blue { background-color: rgba(179, 229, 252, 0.5); }
+   .poetic.highlighted-pink,
+   body.dark .poetic.highlighted-pink { background-color: rgba(255, 192, 203, 0.5); }
+   .poetic.highlighted-none { background-color: transparent; }
+   
+  </style>
 </head>
-<body class="gradient-bg text-slate-800 min-h-screen">
+<body>
+<!-- Side Menu -->
+<div id="sideMenu" class="side-menu">
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass-card shadow-sm">
-        <div class="max-w-5xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight">MY.NAME</h1>
-            <div class="hidden md:flex space-x-8 text-sm font-medium">
-                <a href="#home" class="hover:text-blue-600 transition">Home</a>
-                <a href="#about" class="hover:text-blue-600 transition">About</a>
-                <a href="#projects" class="hover:text-blue-600 transition">Projects</a>
-                <a href="#contact" class="hover:text-blue-600 transition">Contact</a>
-            </div>
+    <div class="menu-header">
+        <img src="image/book_icon.png" class="menu-logo">
+    </div>
+
+    <button id="menuSearchBtn">Search</button>
+    <button id="menuHistoryBtn">History</button>
+    <button id="menuBookmarksBtn">Bookmarks</button>
+    <button>Highlights</button>
+    <button>Settings</button>
+    <button>About</button>
+
+</div>
+  <!-- Main Header -->
+  <header id="mainHeader">
+    <div class="left-section">
+      <button class="menu-btn" id="menuBtn">☰</button>
+      <button class="book-dropdown-btn" id="bookBtn">PROVERBS</button>
+      <div class="book-grid-popup" id="bookGrid"></div>
+      <button class="chapter-dropdown-btn" id="chapterBtn">1</button>
+      <div class="chapter-grid-popup" id="chapterGrid"></div>
+      <button class="nav-btn" id="prevChapter">⏮️</button>
+      <button class="nav-btn" id="nextChapter">⏭️</button>
+    </div>
+    <div class="right-section">
+      <button class="icon-btn" id="searchIcon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <button class="icon-btn" id="textSizeIcon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="4 7 4 4 20 4 20 7"></polyline>
+          <line x1="9" y1="20" x2="15" y2="20"></line>
+          <line x1="12" y1="4" x2="12" y2="20"></line>
+        </svg>
+      </button>
+      <button class="toggle-btn" id="themeToggle" onclick="toggleTheme()">☀</button>
+    </div>
+  </header>
+
+  <!-- Text Size and Line Spacing Popup -->
+  <div id="settings-popup">
+    <div class="setting-group">
+      <label for="textSizeSlider">Text Size</label>
+      <input type="range" id="textSizeSlider" min="12" max="24" value="16">
+    </div>
+    <div class="setting-group">
+      <label for="lineSpaceSlider">Line Spacing</label>
+      <input type="range" id="lineSpaceSlider" min="1.0" max="2.5" step="0.1" value="1.8">
+    </div>
+  </div>
+  
+  <!-- Definition Popup -->
+  <div id="definition-overlay" class="definition-overlay" onclick="closeDefinitionPopup()">
+    <div id="definition-popup" class="definition-popup" onclick="event.stopPropagation()">
+      <button class="close-btn" onclick="closeDefinitionPopup()">×</button>
+      <div id="definition-content" class="definition-popup-content"></div>
+    </div>
+  </div>
+
+  <!-- Search Header -->
+  <div id="searchHeader">
+    <button id="backToMain">←</button>
+    <span>Search</span>
+  </div>
+
+  <!-- History Header -->
+  <div id="historyHeader">
+    <div class="history-header-left">
+      <button id="backToMainHistory">←</button>
+      <span>History</span>
+    </div>
+    <button class="icon-btn" id="deleteHistoryIcon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Bookmark Header -->
+  <div id="bookmarkHeader">
+    <div class="bookmark-header-left">
+      <button id="backToMainBookmarks">←</button>
+      <span>Bookmarks</span>
+    </div>
+    <button class="icon-btn" id="deleteBookmarksIcon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Search Page -->
+  <div id="searchPage" style="display: none;">
+    <div id="searchPage-container">
+        <div id="search-input-group">
+            <input type="text" id="searchInput" placeholder="Search">
+            <button id="doSearch">Search</button>
         </div>
-    </nav>
+        <div id="searchResults"></div>
+    </div>
+  </div>
 
-    <!-- Hero Section -->
-    <section id="home" class="pt-32 pb-20 px-6">
-        <div class="max-w-4xl mx-auto text-center">
-            <div class="inline-block p-1 mb-6 rounded-full bg-blue-100 text-blue-700 px-4 py-1 text-xs font-bold uppercase tracking-wider">
-                Available for work
-            </div>
-            <h2 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-                Designing digital <span class="text-blue-600">experiences</span> that matter.
-            </h2>
-            <p class="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Hi, I'm a passionate creator based in New York. I specialize in building clean, functional, and user-centric websites.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#projects" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-semibold hover:bg-slate-800 transition shadow-lg">View My Work</a>
-                <a href="#contact" class="bg-white text-slate-900 px-8 py-3 rounded-xl font-semibold border border-slate-200 hover:border-slate-300 transition shadow-sm">Get in Touch</a>
-            </div>
-        </div>
-    </section>
+  <!-- History Page -->
+  <div id="historyPage" style="display: none;">
+    <div id="historyList"></div>
+    <button id="deleteHistoryBtn">Delete</button>
+  </div>
+  
+  <!-- Bookmark Page -->
+  <div id="bookmarkPage" style="display: none;">
+    <div id="bookmarkEntries"></div>
+    <button id="deleteBookmarksBtn">Delete</button>
+  </div>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 px-6 bg-white/50">
-        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-            <div class="relative">
-                <div class="aspect-square bg-slate-200 rounded-2xl overflow-hidden shadow-2xl">
-                    <!-- Placeholder for image -->
-                    <div class="w-full h-full flex items-center justify-center text-slate-400">
-                        <i data-lucide="user" class="w-24 h-24"></i>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-3xl font-bold mb-6">About Me</h3>
-                <p class="text-slate-600 mb-6 text-lg leading-relaxed">
-                    With over 5 years of experience in the creative industry, I've worked with startups and established brands to bring their visions to life. I believe that good design is invisible and focuses on solving problems.
-                </p>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 glass-card rounded-lg">
-                        <h4 class="font-bold text-blue-600">UI/UX Design</h4>
-                        <p class="text-sm text-slate-500">Figma, Adobe XD</p>
-                    </div>
-                    <div class="p-4 glass-card rounded-lg">
-                        <h4 class="font-bold text-blue-600">Frontend</h4>
-                        <p class="text-sm text-slate-500">React, Tailwind, JS</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <main id="content"></main>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 px-6">
-        <div class="max-w-xl mx-auto glass-card p-8 md:p-12 rounded-3xl shadow-xl">
-            <div class="text-center mb-10">
-                <h3 class="text-3xl font-bold mb-2">Let's Connect</h3>
-                <p class="text-slate-500">Have a project in mind? Drop me a message below.</p>
-            </div>
-            <form id="contactForm" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-semibold mb-2 ml-1">Full Name</label>
-                    <input type="text" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="John Doe">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-2 ml-1">Email Address</label>
-                    <input type="email" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="john@example.com">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold mb-2 ml-1">Message</label>
-                    <textarea rows="4" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" placeholder="Tell me about your project..."></textarea>
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition shadow-lg flex items-center justify-center gap-2">
-                    Send Message <i data-lucide="send" class="w-4 h-4"></i>
-                </button>
-            </form>
-            <div id="successMessage" class="hidden mt-6 p-4 bg-green-50 text-green-700 border border-green-200 rounded-xl text-center">
-                Thanks! I'll get back to you soon.
-            </div>
-        </div>
-    </section>
+  <!-- Floating Toolbar -->
+  <div id="floating-toolbar">
+    <button id="toolbar-highlight" style="background:none; border:none; cursor:pointer;">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+    width="24" height="24" viewBox="0 0 24 24" 
+    fill="currentColor">
+    <!-- Pencil -->
+    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/>
+    <path d="M20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 
+    3.75 3.75 1.83-1.83z"/>
+    <!-- Bottom rectangle (highlight bar) -->
+    <rect x="3" y="20" width="18" height="2" rx="0.5"/>
+    </svg>
+    </button>
+    <button id="toolbar-bookmark">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </button>
+    <button id="toolbar-copy">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </button>
+    <button id="toolbar-notes" style="background:none; border:none; cursor:pointer;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+    viewBox="0 0 24 24" fill="currentColor">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    <line x1="8" y1="9" x2="16" y2="9" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="8" y1="13" x2="16" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    <line x1="8" y1="17" x2="13" y2="17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    </button>
+   
+  </div>
 
-    <!-- Footer -->
-    <footer class="py-10 border-t border-slate-200 text-center text-slate-500 text-sm">
-        <p>&copy; 2024 My Name. Built with Tailwind CSS.</p>
-        <div class="flex justify-center space-x-6 mt-4">
-            <a href="#" class="hover:text-blue-600 transition">Twitter</a>
-            <a href="#" class="hover:text-blue-600 transition">GitHub</a>
-            <a href="#" class="hover:text-blue-600 transition">LinkedIn</a>
-        </div>
-    </footer>
+  <!-- Highlight Toolbar -->
+  <div id="highlight-toolbar">
+    <button class="highlight-color-btn" style="background-color: #ffff66;" data-color="yellow"></button>
+    <button class="highlight-color-btn" style="background-color: #aaffaa;" data-color="green"></button>
+    <button class="highlight-color-btn" style="background-color: #b3e5fc;" data-color="blue"></button>
+    <button class="highlight-color-btn" style="background-color: #ffc0cb;" data-color="pink"></button>
+    <!-- MODIFIED: The clear/X button will now go back to the main toolbar -->
+    <button id="clear-highlight-back" class="highlight-color-btn" style="background-color: #ccc; width: 30px; height: 30px; line-height: 26px; font-size: 14px; color: #333; font-weight: bold;" data-color="none">X</button>
+  </div>
 
-    <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+  <script>
+    const contentElement = document.getElementById('content');
+    const toggleBtn = document.getElementById('themeToggle');
+    const chapterBtn = document.getElementById('chapterBtn');
+    const chapterGrid = document.getElementById('chapterGrid');
+    const bookBtn = document.getElementById('bookBtn');
+    const bookGrid = document.getElementById('bookGrid');
+    const prevBtn = document.getElementById('prevChapter');
+    const nextBtn = document.getElementById('nextChapter');
+    const menuBtn = document.getElementById('menuBtn');
+    const sideMenu = document.getElementById('sideMenu');
+    const mainHeader = document.getElementById('mainHeader');
+    const searchHeader = document.getElementById('searchHeader');
+    const historyHeader = document.getElementById('historyHeader');
+    const bookmarkHeader = document.getElementById('bookmarkHeader');
+    const backToMain = document.getElementById('backToMain');
+    const backToMainHistory = document.getElementById('backToMainHistory');
+    const backToMainBookmarks = document.getElementById('backToMainBookmarks');
+    const searchPage = document.getElementById('searchPage');
+    const historyPage = document.getElementById('historyPage');
+    const bookmarkPage = document.getElementById('bookmarkPage');
+    const searchInput = document.getElementById('searchInput');
+    const searchResults = document.getElementById('searchResults');
+    const doSearchBtn = document.getElementById('doSearch');
+    const searchIcon = document.getElementById('searchIcon');
+    const textSizeIcon = document.getElementById('textSizeIcon');
+    const settingsPopup = document.getElementById('settings-popup');
+    const textSizeSlider = document.getElementById('textSizeSlider');
+    const lineSpaceSlider = document.getElementById('lineSpaceSlider');
+    const definitionOverlay = document.getElementById('definition-overlay');
+    const definitionContent = document.getElementById('definition-content');
+    const menuSearchBtn = document.getElementById('menuSearchBtn');
+    const menuHistoryBtn = document.getElementById('menuHistoryBtn');
+    const menuBookmarksBtn = document.getElementById('menuBookmarksBtn');
+    const historyList = document.getElementById('historyList');
+    const bookmarkEntries = document.getElementById('bookmarkEntries');
+    const deleteHistoryIcon = document.getElementById('deleteHistoryIcon');
+    const deleteHistoryBtn = document.getElementById('deleteHistoryBtn');
+    const floatingToolbar = document.getElementById('floating-toolbar');
+    const highlightButton = document.getElementById('toolbar-highlight');
+    const copyButton = document.getElementById('toolbar-copy');
+    const bookmarkButton = document.getElementById('toolbar-bookmark');
+    const deleteBookmarksIcon = document.getElementById('deleteBookmarksIcon');
+    const deleteBookmarksBtn = document.getElementById('deleteBookmarksBtn');
+    const highlightToolbar = document.getElementById('highlight-toolbar');
+    const highlightColorButtons = document.querySelectorAll('.highlight-color-btn');
 
-        // Handle Form Submission
-        const form = document.getElementById('contactForm');
-        const success = document.getElementById('successMessage');
+    let isSelectionMode = false;
+    let isBookmarkSelectionMode = false;
+    let selectedVerseElement = null;
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            form.classList.add('hidden');
-            success.classList.remove('hidden');
+    // A simple definitions database
+    const definitions = {
+    "Jacob:tinak heh Isreal tinak si.": "<b>Jacob</b>: tinak heh Isreal tinak si.",
+       "heh:tinak heh heh si.": "<b>heh</b>: tinak heh heh si."
+    };
+
+    menuBtn.addEventListener('click', () => {
+      sideMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (event) => {
+      // Close side menu if click is outside of it
+      if (sideMenu.classList.contains('open')) {
+        const clickedInsideMenu = sideMenu.contains(event.target);
+        const clickedMenuButton = menuBtn.contains(event.target);
+        if (!clickedInsideMenu && !clickedMenuButton) {
+          sideMenu.classList.remove('open');
+        }
+      }
+      
+      // Close settings popup if click is outside
+      if (!settingsPopup.contains(event.target) && event.target !== textSizeIcon) {
+          settingsPopup.style.display = 'none';
+      }
+
+      // Close book and chapter grids if click is outside of them
+      const isClickInsideBookGrid = bookGrid.contains(event.target) || bookBtn.contains(event.target);
+      const isClickInsideChapterGrid = chapterGrid.contains(event.target) || chapterBtn.contains(event.target);
+
+      if (!isClickInsideBookGrid) {
+        bookGrid.style.display = 'none';
+      }
+      
+      if (!isClickInsideChapterGrid) {
+        chapterGrid.style.display = 'none';
+      }
+      
+      // Hide toolbars if clicking anywhere else
+      if (!floatingToolbar.contains(event.target) && !highlightToolbar.contains(event.target) && !contentElement.contains(event.target)) {
+          if (selectedVerseElement) {
+              selectedVerseElement.classList.remove('selected');
+              selectedVerseElement = null;
+          }
+          floatingToolbar.style.display = 'none';
+          highlightToolbar.style.display = 'none';
+      }
+    });
+    
+    // Handle clicks on a verse
+    contentElement.addEventListener('click', (event) => {
+        let target = event.target;
+        // Find the parent verse element
+        while (target && !target.classList.contains('verse') && !target.classList.contains('poetic') && target !== contentElement) {
+            target = target.parentElement;
+        }
+
+        if (target && (target.classList.contains('verse') || target.classList.contains('poetic'))) {
+            // Remove selection from previous verse
+            if (selectedVerseElement && selectedVerseElement !== target) {
+                selectedVerseElement.classList.remove('selected');
+            }
+            
+            // Toggle selection for the clicked verse
+            target.classList.toggle('selected');
+            
+            if (target.classList.contains('selected')) {
+                selectedVerseElement = target;
+                floatingToolbar.style.display = 'flex';
+                highlightToolbar.style.display = 'none'; // Ensure highlight toolbar is hidden initially
+            } else {
+                selectedVerseElement = null;
+                floatingToolbar.style.display = 'none';
+                highlightToolbar.style.display = 'none';
+            }
+        }
+    });
+
+    // Add functionality to the copy button
+    copyButton.addEventListener('click', () => {
+        if (selectedVerseElement) {
+            const verseClone = selectedVerseElement.cloneNode(true);
+            const superscripts = verseClone.querySelectorAll('sup');
+            superscripts.forEach(sup => sup.remove());
+            const verseText = verseClone.textContent;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = verseText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            tempTextArea.setSelectionRange(0, 99999);
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            copyButton.style.color = '#fff';
+            copyButton.style.backgroundColor = 'var(--header-bg)';
+            setTimeout(() => {
+                copyButton.style.color = '';
+                copyButton.style.backgroundColor = '';
+            }, 500);
+        }
+    });
+
+
+    const bibleData = {
+      proverbs: {
+        1: {
+          title: "Jakob In A Tsapate Tsa In Dawlber Thu A Tsahnak",
+          verses: [
+            "1:Tsin <span class=\"defined-word\" data-word=\"Jacob:tinak heh Isreal tinak si.\">Jacob<sup>b</sup></span>  in a tsapate ko in,", "P_BREAK", ": \"Mun khat ah khawmdang", "P_BREAK", ": ula mailam ah nang vum ah", "P_BREAK", ": thil tsang tu te nang rel ham tu sing,\" ti ", "P_BREAK", ": si.",
+            "P_BREAK",    
+            "2: Mete <span class=\"defined-word\" data-word=\"heh:tinak heh heh si.\">heh<sup>a</sup></span> Israel miphun lejnihte st atsia amahni nenah a pa thu tsahnak si Amahni thaw a kaih dun in pakhat pakhat in muitsu pe berh si.",
+            "H: Jakob Thihnak Le Phumnak",
+            "3: Tsin Jakob in a tsapate nenah, \"Ka pupate nenah hong tu silang. Kanaan ram Mamre pin ni suaknak lam Makpelah ah,",
+            "4: Hit mipa Efron nena ram le lungkaw kheh thaanmual tuhin Abraham leinak om si Tsimi ah ka phum un.",
+            "5: Tsimi ah Abraham le a zau Sarah phum ongla si. Isaak le a zii Rebekah khen tsimi ah phumnak pah si Keimah khen ka zii Leah kheh tsimi ah phum si lang.",
+            "6: Tsimi loram le a sungah om lungkaw kheh Hit mipa nena leinak si,\" ti si.",
+            "7: A tsapate nenah thu a tsah tselh tsangin Jakob kheh a haihawh bo zual nom si. Tsimi pah kheh a pupa le a pa nenah hong si."
+          ]
+        },
+      }
+    };
+
+function saveSettings() {
+    const settings = {
+        textSize: document.body.style.fontSize,
+        lineHeight: document.body.style.lineHeight,
+        theme: document.body.classList.contains('dark') ? 'dark' : 'light'
+    };
+    localStorage.setItem('bibleSettings', JSON.stringify(settings));
+}
+
+function loadSettings() {
+    const savedSettings = localStorage.getItem('bibleSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        document.body.style.fontSize = settings.textSize;
+        document.body.style.lineHeight = settings.lineHeight;
+        if (settings.theme === 'dark') {
+            document.body.classList.add('dark');
+            toggleBtn.textContent = '🌙';
+        } else {
+            document.body.classList.remove('dark');
+            toggleBtn.textContent = '☀';
+        }
+        textSizeSlider.value = parseFloat(settings.textSize) || 16;
+        lineSpaceSlider.value = parseFloat(settings.lineHeight) || 1.8;
+    }
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('dark');
+  toggleBtn.textContent = document.body.classList.contains('dark') ? '🌙' : '☀';
+  saveSettings();
+}
+
+function populateBooks() {
+  bookGrid.innerHTML = "";
+  Object.keys(bibleData).forEach(book => {
+    const btn = document.createElement('button');
+    btn.textContent = book.toUpperCase();
+    btn.onclick = () => {
+      bookBtn.dataset.book = book;
+      bookBtn.textContent = book.toUpperCase();
+      bookGrid.style.display = "none";
+      chapterBtn.textContent = "1";
+      populateChapters(book);
+      changeBookChapter(book, Object.keys(bibleData[book])[0] || "1", "1");
+    };
+    bookGrid.appendChild(btn);
+  });
+}
+
+function populateChapters(book) {
+  chapterGrid.innerHTML = "";
+  const chapters = Object.keys(bibleData[book]);
+  if (chapters.length === 0) {
+    chapterGrid.innerHTML = "<p style='padding: 10px; font-style: italic; text-align: center;'>No chapters found.</p>";
+    return;
+  }
+  
+  chapters.forEach(ch => {
+    const btn = document.createElement('button');
+    btn.textContent = ch;
+    btn.onclick = () => {
+      chapterBtn.textContent = ch;
+      chapterGrid.style.display = "none";
+      changeBookChapter(book, ch, "1");
+    };
+    chapterGrid.appendChild(btn);
+  });
+}
+
+function changeBookChapter(book = null, chapter = null, scrollVerse = null) {
+  book = book || bookBtn.dataset.book;
+  chapter = chapter || chapterBtn.textContent;
+  const data = bibleData[book]?.[chapter];
+  
+  if (data) {
+    let html = `<div class="chapter-title">${data.title}</div><div class="chapter-text">`;
+    let currentVerseNumber = null;
+    let currentVerseTextParts = [];
+    
+    data.verses.forEach(v => {
+      if (v === "P_BREAK") {
+        currentVerseTextParts.push('<br>');
+      } else if (v.startsWith("H:")) {
+        if (currentVerseNumber !== null) {
+            html += `<span class="verse" data-verse="${currentVerseNumber}"><sup id="v${currentVerseNumber}">${currentVerseNumber}</sup> ${currentVerseTextParts.join('')} </span>`;
+        }
+        html += `</div><div class="chapter-title">${v.slice(2)}</div><div class="chapter-text">`;
+        currentVerseNumber = null;
+        currentVerseTextParts = [];
+      } else if (v.startsWith(":")) {
+        currentVerseTextParts.push(v.slice(1).trim());
+      } else {
+        if (currentVerseNumber !== null) {
+            html += `<span class="verse" data-verse="${currentVerseNumber}"><sup id="v${currentVerseNumber}">${currentVerseNumber}</sup> ${currentVerseTextParts.join('')} </span>`;
+        }
+        const [numPart, textPart] = v.split(/:(.+)/);
+        currentVerseNumber = numPart.trim();
+        currentVerseTextParts = [textPart.trim()];
+      }
+    });
+    
+    if (currentVerseNumber !== null) {
+        html += `<span class="verse" data-verse="${currentVerseNumber}"><sup id="v${currentVerseNumber}">${currentVerseNumber}</sup> ${currentVerseTextParts.join('')} </span>`;
+    }
+
+    html += "</div>";
+    contentElement.innerHTML = html;
+    
+    document.querySelectorAll('.defined-word').forEach(wordEl => {
+        wordEl.addEventListener('click', () => {
+            const wordKey = wordEl.dataset.word;
+            const definition = definitions[wordKey];
+            if (definition) {
+                showDefinitionPopup(definition);
+            }
         });
-    </script>
+    });
+
+    if (scrollVerse) {
+      const target = document.querySelector(`[data-verse="${scrollVerse}"]`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    saveCurrentState(book, chapter, scrollVerse || "1");
+    loadBookmarks();
+    loadHighlights();
+  } else {
+    contentElement.innerHTML = "<p>Chapter not found.</p>";
+  }
+}
+
+function showDefinitionPopup(text) {
+    definitionContent.innerHTML = text;
+    definitionOverlay.style.display = 'flex';
+}
+
+function closeDefinitionPopup() {
+    definitionOverlay.style.display = 'none';
+}
+
+function saveCurrentState(book, chapter, verse) {
+  if (typeof Android !== 'undefined' && Android.saveState) {
+    Android.saveState(book, chapter, verse);
+  }
+}
+
+function loadLastState() {
+  let savedState = null;
+  if (typeof Android !== 'undefined' && Android.getState) {
+    try {
+      savedState = JSON.parse(Android.getState());
+    } catch (e) {
+      console.error("Error parsing Android state:", e);
+    }
+  }
+
+  if (savedState && bibleData[savedState.book] && bibleData[savedState.book][savedState.chapter]) {
+    const { book, chapter, verse } = savedState;
+    bookBtn.dataset.book = book;
+    bookBtn.textContent = book.toUpperCase();
+    chapterBtn.textContent = chapter;
+    populateChapters(book);
+    changeBookChapter(book, chapter, verse);
+  } else {
+    const firstBook = Object.keys(bibleData).find(book => Object.keys(bibleData[book]).length > 0);
+    if (firstBook) {
+        const firstChapter = Object.keys(bibleData[firstBook])[0];
+        bookBtn.dataset.book = firstBook;
+        bookBtn.textContent = firstBook.toUpperCase();
+        chapterBtn.textContent = firstChapter;
+        populateChapters(firstBook);
+        changeBookChapter(firstBook, firstChapter);
+    } else {
+        contentElement.innerHTML = "<p>No books with content found.</p>";
+    }
+  }
+}
+
+function goToNextChapter() {
+  const book = bookBtn.dataset.book;
+  const chapters = Object.keys(bibleData[book]);
+  const currentChapterIndex = chapters.indexOf(chapterBtn.textContent);
+  if (currentChapterIndex !== -1 && currentChapterIndex < chapters.length - 1) {
+    const nextChapter = chapters[currentChapterIndex + 1];
+    chapterBtn.textContent = nextChapter;
+    changeBookChapter(book, nextChapter, "1");
+  }
+}
+
+function goToPrevChapter() {
+  const book = bookBtn.dataset.book;
+  const chapters = Object.keys(bibleData[book]);
+  const currentChapterIndex = chapters.indexOf(chapterBtn.textContent);
+  if (currentChapterIndex > 0) {
+    const prevChapter = chapters[currentChapterIndex - 1];
+    chapterBtn.textContent = prevChapter;
+    changeBookChapter(book, prevChapter, "1");
+  }
+}
+
+prevBtn.addEventListener('click', goToPrevChapter);
+nextBtn.addEventListener('click', goToNextChapter);
+
+bookBtn.addEventListener('click', (event) => {
+  event.stopPropagation();
+  bookGrid.style.display = bookGrid.style.display === 'grid' ? 'none' : 'grid';
+  chapterGrid.style.display = 'none';
+});
+
+chapterBtn.addEventListener('click', (event) => {
+  event.stopPropagation();
+  populateChapters(bookBtn.dataset.book);
+  chapterGrid.style.display = chapterGrid.style.display === 'grid' ? 'none' : 'grid';
+  bookGrid.style.display = 'none';
+});
+
+menuSearchBtn.addEventListener('click', () => {
+  sideMenu.classList.remove('open');
+  contentElement.style.display = 'none';
+  mainHeader.style.display = 'none';
+  historyPage.style.display = 'none';
+  historyHeader.style.display = 'none';
+  bookmarkPage.style.display = 'none';
+  bookmarkHeader.style.display = 'none';
+  searchHeader.style.display = 'flex';
+  searchPage.style.display = 'block';
+});
+
+menuHistoryBtn.addEventListener('click', () => {
+    sideMenu.classList.remove('open');
+    contentElement.style.display = 'none';
+    mainHeader.style.display = 'none';
+    searchPage.style.display = 'none';
+    searchHeader.style.display = 'none';
+    bookmarkPage.style.display = 'none';
+    bookmarkHeader.style.display = 'none';
+    historyHeader.style.display = 'flex';
+    historyPage.style.display = 'block';
+    isSelectionMode = false;
+    deleteHistoryBtn.style.display = 'none';
+    loadHistory();
+});
+
+menuBookmarksBtn.addEventListener('click', () => {
+    sideMenu.classList.remove('open');
+    contentElement.style.display = 'none';
+    mainHeader.style.display = 'none';
+    searchPage.style.display = 'none';
+    searchHeader.style.display = 'none';
+    historyPage.style.display = 'none';
+    historyHeader.style.display = 'none';
+    bookmarkHeader.style.display = 'flex';
+    bookmarkPage.style.display = 'block';
+    isBookmarkSelectionMode = false;
+    deleteBookmarksBtn.style.display = 'none';
+    renderBookmarksPage();
+});
+
+backToMain.addEventListener('click', () => {
+  searchPage.style.display = 'none';
+  searchHeader.style.display = 'none';
+  mainHeader.style.display = 'flex';
+  contentElement.style.display = 'block';
+});
+
+backToMainHistory.addEventListener('click', () => {
+  historyPage.style.display = 'none';
+  historyHeader.style.display = 'none';
+  mainHeader.style.display = 'flex';
+  contentElement.style.display = 'block';
+});
+
+backToMainBookmarks.addEventListener('click', () => {
+  bookmarkPage.style.display = 'none';
+  bookmarkHeader.style.display = 'none';
+  mainHeader.style.display = 'flex';
+  contentElement.style.display = 'block';
+});
+
+deleteHistoryIcon.addEventListener('click', () => {
+  isSelectionMode = !isSelectionMode;
+  deleteHistoryBtn.style.display = isSelectionMode ? 'block' : 'none';
+  loadHistory();
+});
+
+deleteHistoryBtn.addEventListener('click', () => {
+  const checkboxes = document.querySelectorAll('#historyList input[type="checkbox"]:checked');
+  const selectedIndices = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
+  if (selectedIndices.length === 0) return;
+  let history = JSON.parse(localStorage.getItem('bibleHistory')) || [];
+  history = history.filter((_, index) => !selectedIndices.includes(index));
+  localStorage.setItem('bibleHistory', JSON.stringify(history));
+  isSelectionMode = false;
+  deleteHistoryBtn.style.display = 'none';
+  loadHistory();
+});
+
+doSearchBtn.addEventListener('click', () => {
+  const query = searchInput.value.trim();
+  if (!query) return;
+  const results = [];
+  const regex = new RegExp(query, 'gi');
+  Object.keys(bibleData).forEach(book => {
+    Object.keys(bibleData[book]).forEach(chapter => {
+      const chData = bibleData[book][chapter];
+      if (chData && chData.verses) {
+        let currentVerseNumber = null;
+        let currentVerseText = "";
+        chData.verses.forEach(v => {
+          if (v === "P_BREAK") {
+            currentVerseText += "\n";
+          } else if (v.startsWith("H:")) {
+            if (currentVerseNumber !== null && regex.test(currentVerseText)) {
+              results.push({ book, chapter, verse: currentVerseNumber, text: currentVerseText });
+            }
+            currentVerseNumber = null;
+            currentVerseText = "";
+          } else if (v.startsWith(":")) {
+            currentVerseText += v.slice(1).trim();
+          } else {
+            if (currentVerseNumber !== null && regex.test(currentVerseText)) {
+              results.push({ book, chapter, verse: currentVerseNumber, text: currentVerseText });
+            }
+            const [numPart, textPart] = v.split(/:(.+)/);
+            currentVerseNumber = numPart.trim();
+            currentVerseText = textPart.trim();
+          }
+        });
+        if (currentVerseNumber !== null && regex.test(currentVerseText)) {
+          results.push({ book, chapter, verse: currentVerseNumber, text: currentVerseText });
+        }
+      }
+    });
+  });
+
+  if (results.length === 0) {
+    searchResults.innerHTML = "<p>Lai tsang Tawk Ngawl Si.</p>";
+  } else {
+    searchResults.innerHTML = results.map(r => {
+      const highlightedText = r.text.replace(regex, match => `<mark>${match}</mark>`);
+      return `<div class="search-result-item" onclick="goToSearchResult('${r.book}','${r.chapter}','${r.verse}')">
+        <strong>${r.book.toUpperCase()} ${r.chapter}:${r.verse}</strong> – ${highlightedText}
+      </div>`;
+    }).join('');
+  }
+});
+
+function goToSearchResult(book, chapter, verse) {
+  searchPage.style.display = 'none';
+  historyPage.style.display = 'none';
+  searchHeader.style.display = 'none';
+  historyHeader.style.display = 'none';
+  mainHeader.style.display = 'flex';
+  contentElement.style.display = 'block';
+  bookBtn.dataset.book = book;
+  bookBtn.textContent = book.toUpperCase();
+  chapterBtn.textContent = chapter;
+  populateChapters(book);
+  changeBookChapter(book, chapter, verse);
+  
+  const verseText = getVerseText(book, chapter, verse);
+  saveToHistory(book, chapter, verse, verseText);
+
+  const verseEl = document.querySelector(`.verse[data-verse="${verse}"]`);
+  if (verseEl) {
+    verseEl.classList.add("temp-highlight");
+    setTimeout(() => verseEl.classList.remove("temp-highlight"), 3000);
+    verseEl.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+}
+
+function getVerseText(book, chapter, verse) {
+    const data = bibleData[book]?.[chapter];
+    if (!data) return '';
+    let currentVerseNumber = null;
+    let currentVerseText = '';
+    for (const v of data.verses) {
+        if (v === 'P_BREAK') {
+            currentVerseText += '\n';
+        } else if (v.startsWith('H:')) {
+            if (currentVerseNumber === verse) return currentVerseText.trim();
+            currentVerseNumber = null;
+            currentVerseText = '';
+        } else if (v.startsWith(':')) {
+            currentVerseText += ' ' + v.slice(1).trim();
+        } else {
+            if (currentVerseNumber === verse) return currentVerseText.trim();
+            const [numPart, textPart] = v.split(/:(.+)/);
+            currentVerseNumber = numPart.trim();
+            currentVerseText = textPart.trim();
+        }
+    }
+    if (currentVerseNumber === verse) return currentVerseText.trim();
+    return '';
+}
+
+function saveToHistory(book, chapter, verse, text) {
+    let history = JSON.parse(localStorage.getItem('bibleHistory')) || [];
+    const isDuplicate = history.some(item => 
+        item.book === book && item.chapter === chapter && item.verse === verse
+    );
+    if (!isDuplicate) {
+        const now = new Date();
+        const timestamp = now.toLocaleDateString('en-US', { day: '2-digit', month: 'short' }) + ' | ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        history.unshift({ book, chapter, verse, text, timestamp });
+        localStorage.setItem('bibleHistory', JSON.stringify(history));
+    }
+}
+
+function loadHistory() {
+    const history = JSON.parse(localStorage.getItem('bibleHistory')) || [];
+    if (history.length === 0) {
+        historyList.innerHTML = "<p>Your history is empty.</p>";
+    } else {
+        historyList.innerHTML = history.map((item, index) => `
+            <label class="history-item">
+                ${isSelectionMode ? `<input type="checkbox" data-index="${index}" />` : ''}
+                <div class="history-item-content" onclick="!isSelectionMode && goToSearchResult('${item.book}', '${item.chapter}', '${item.verse}')">
+                    <div class="history-item-header">
+                        <strong>${item.book.toUpperCase()} ${item.chapter}:${item.verse}</strong>
+                    </div>
+                    <div class="history-item-timestamp">${item.timestamp}</div>
+                </div>
+            </label>
+        `).join('');
+    }
+}
+
+function getBookmarks() {
+    return JSON.parse(localStorage.getItem('bibleBookmarks')) || [];
+}
+
+function saveBookmarks(bookmarks) {
+    localStorage.setItem('bibleBookmarks', JSON.stringify(bookmarks));
+}
+
+function toggleBookmark(book, chapter, verse) {
+    let bookmarks = getBookmarks();
+    const index = bookmarks.findIndex(b => b.book === book && b.chapter === chapter && b.verse === verse);
+    if (index === -1) {
+        bookmarks.push({ book, chapter, verse });
+    } else {
+        bookmarks.splice(index, 1);
+    }
+    saveBookmarks(bookmarks);
+    loadBookmarks();
+}
+
+function loadBookmarks() {
+    const bookmarks = getBookmarks();
+    document.querySelectorAll('.bookmark-icon').forEach(icon => icon.remove());
+    bookmarks.forEach(b => {
+        const verseEl = document.querySelector(`.verse[data-verse="${b.verse}"]`);
+        const book = bookBtn.dataset.book;
+        const chapter = chapterBtn.textContent;
+        if (verseEl && b.book === book && b.chapter === chapter) {
+            const bookmarkIcon = document.createElement('span');
+            bookmarkIcon.className = 'bookmark-icon';
+            bookmarkIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`;
+            if (!verseEl.querySelector('.bookmark-icon')) {
+                const brs = verseEl.querySelectorAll('br');
+                if (brs.length > 0) {
+                  verseEl.insertBefore(bookmarkIcon, brs[brs.length - 1]);
+                } else {
+                  verseEl.appendChild(bookmarkIcon);
+                }
+            }
+        }
+    });
+}
+
+function renderBookmarksPage() {
+    const bookmarks = getBookmarks();
+    if (bookmarks.length === 0) {
+        bookmarkEntries.innerHTML = "<p>You have no bookmarks saved.</p>";
+    } else {
+        bookmarkEntries.innerHTML = bookmarks.map((b, index) => `
+            <label class="bookmark-item">
+                ${isBookmarkSelectionMode ? `<input type="checkbox" data-index="${index}" />` : ''}
+                <div class="bookmark-item-content" onclick="!isBookmarkSelectionMode && goToBookmark('${b.book}', '${b.chapter}', '${b.verse}')">
+                    <strong>${b.book.toUpperCase()} ${b.chapter}:${b.verse}</strong>
+                </div>
+            </label>
+        `).join('');
+    }
+}
+
+function goToBookmark(book, chapter, verse) {
+    bookmarkPage.style.display = 'none';
+    bookmarkHeader.style.display = 'none';
+    mainHeader.style.display = 'flex';
+    contentElement.style.display = 'block';
+    bookBtn.dataset.book = book;
+    bookBtn.textContent = book.toUpperCase();
+    chapterBtn.textContent = chapter;
+    populateChapters(book);
+    changeBookChapter(book, chapter, verse);
+}
+
+bookmarkButton.addEventListener('click', () => {
+    if (selectedVerseElement) {
+        const book = bookBtn.dataset.book;
+        const chapter = chapterBtn.textContent;
+        const verse = selectedVerseElement.dataset.verse;
+        toggleBookmark(book, chapter, verse);
+    }
+});
+
+searchIcon.addEventListener('click', () => {
+    contentElement.style.display = 'none';
+    mainHeader.style.display = 'none';
+    searchHeader.style.display = 'flex';
+    searchPage.style.display = 'block';
+});
+
+textSizeIcon.addEventListener('click', (event) => {
+    event.stopPropagation();
+    settingsPopup.style.display = settingsPopup.style.display === 'flex' ? 'none' : 'flex';
+});
+
+textSizeSlider.addEventListener('input', (event) => {
+    document.body.style.fontSize = `${event.target.value}px`;
+    saveSettings();
+});
+
+lineSpaceSlider.addEventListener('input', (event) => {
+    document.body.style.lineHeight = event.target.value;
+    saveSettings();
+});
+
+deleteBookmarksIcon.addEventListener('click', () => {
+    isBookmarkSelectionMode = !isBookmarkSelectionMode;
+    deleteBookmarksBtn.style.display = isBookmarkSelectionMode ? 'block' : 'none';
+    renderBookmarksPage();
+});
+
+deleteBookmarksBtn.addEventListener('click', () => {
+  const checkboxes = document.querySelectorAll('#bookmarkEntries input[type="checkbox"]:checked');
+  const selectedIndices = Array.from(checkboxes).map(cb => parseInt(cb.dataset.index));
+  if (selectedIndices.length === 0) return;
+  let bookmarks = getBookmarks();
+  bookmarks = bookmarks.filter((_, index) => !selectedIndices.includes(index));
+  saveBookmarks(bookmarks);
+  isBookmarkSelectionMode = false;
+  deleteBookmarksBtn.style.display = 'none';
+  renderBookmarksPage();
+  loadBookmarks();
+});
+
+function getCurrentHighlightColor(element) {
+    if (element.classList.contains('highlighted-yellow')) return 'yellow';
+    if (element.classList.contains('highlighted-green')) return 'green';
+    if (element.classList.contains('highlighted-blue')) return 'blue';
+    if (element.classList.contains('highlighted-pink')) return 'pink';
+    return 'none';
+}
+
+highlightButton.addEventListener('click', () => {
+    floatingToolbar.style.display = 'none';
+    highlightToolbar.style.display = 'flex';
+});
+
+highlightColorButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        // If it's the specific Clear/X button, logic is slightly different
+        const clickedColor = button.dataset.color;
+        
+        // FUNCTION: Back button functionality
+        if (button.id === 'clear-highlight-back') {
+            highlightToolbar.style.display = 'none';
+            floatingToolbar.style.display = 'flex';
+            
+            // If a verse is selected, also clear its highlight as part of "X" action
+            if (selectedVerseElement) {
+                selectedVerseElement.classList.remove('highlighted-yellow', 'highlighted-green', 'highlighted-blue', 'highlighted-pink');
+                saveHighlight(bookBtn.dataset.book, chapterBtn.textContent, selectedVerseElement.dataset.verse, 'none');
+            }
+            return;
+        }
+
+        if (!selectedVerseElement) return;
+
+        const book = bookBtn.dataset.book;
+        const chapter = chapterBtn.textContent;
+        const verse = selectedVerseElement.dataset.verse;
+        const currentHighlightColor = getCurrentHighlightColor(selectedVerseElement);
+        let newColor = clickedColor;
+
+        if (currentHighlightColor === clickedColor && clickedColor !== 'none') {
+            newColor = 'none';
+        }
+
+        selectedVerseElement.classList.remove('highlighted-yellow', 'highlighted-green', 'highlighted-blue', 'highlighted-pink', 'highlighted-none');
+        if (newColor !== 'none') {
+            selectedVerseElement.classList.add(`highlighted-${newColor}`);
+        }
+        saveHighlight(book, chapter, verse, newColor);
+    });
+});
+
+function saveHighlight(book, chapter, verse, color) {
+    let highlights = JSON.parse(localStorage.getItem('bibleHighlights')) || {};
+    const key = `${book}-${chapter}-${verse}`;
+    if (color === 'none') {
+        delete highlights[key];
+    } else {
+        highlights[key] = color;
+    }
+    localStorage.setItem('bibleHighlights', JSON.stringify(highlights));
+}
+
+function loadHighlights() {
+    const highlights = JSON.parse(localStorage.getItem('bibleHighlights')) || {};
+    const currentBook = bookBtn.dataset.book;
+    const currentChapter = chapterBtn.textContent;
+    document.querySelectorAll('.verse, .poetic').forEach(verseEl => {
+        verseEl.classList.remove('highlighted-yellow', 'highlighted-green', 'highlighted-blue', 'highlighted-pink', 'highlighted-none');
+        const verseNumber = verseEl.dataset.verse;
+        const key = `${currentBook}-${currentChapter}-${verseNumber}`;
+        const color = highlights[key];
+        if (color && color !== 'none') {
+            verseEl.classList.add(`highlighted-${color}`);
+        }
+    });
+}
+
+populateBooks();
+loadLastState();
+loadSettings();
+</script>
 </body>
 </html>
 
-          
